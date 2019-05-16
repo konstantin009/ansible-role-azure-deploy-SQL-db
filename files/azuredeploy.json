@@ -1,0 +1,61 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "administratorLogin": {
+            "type": "string"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "name": "konsttestserver",
+            "apiVersion": "2015-05-01-preview",
+            "location": "eastus",
+            "properties": {
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "version": "12.0"
+            },
+            "resources": [
+                {
+                   "type": "databases",
+                   "dependsOn": [
+                       "[concat('Microsoft.Sql/servers/', 'konsttestserver')]"
+                   ],
+                   "name": "DBtest1",
+                   "apiVersion": "2017-10-01-preview",
+                   "location": "eastus",
+                   "sku": {
+                       "name": "Basic",
+                       "tier": "Basic"
+                   },
+                   "properties": {
+                       "maxSizeBytes": "104857600",
+                       "collation": "SQL_Latin1_General_CP1_CI_AS"
+                   }
+                },
+                {
+                   "type": "databases",
+                   "dependsOn": [
+                       "[concat('Microsoft.Sql/servers/', 'konsttestserver')]"
+                   ],
+                   "name": "DBtest2",
+                   "apiVersion": "2017-10-01-preview",
+                   "location": "eastus",
+                   "sku": {
+                       "name": "Basic",
+                       "tier": "Basic"
+                   },
+                   "properties": {
+                       "maxSizeBytes": "104857600",
+                       "collation": "SQL_Latin1_General_CP1_CI_AS"
+                   }
+                },
+            ]
+        }
+    ]
+}

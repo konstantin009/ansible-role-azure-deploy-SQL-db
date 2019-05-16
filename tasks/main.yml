@@ -1,0 +1,22 @@
+---
+- name: Create ARM template
+  template:
+    src: /root/ansible/roles/SQL-role/templates/azuredeploy-template
+    dest: /root/ansible/roles/SQL-role/files/azuredeploy.json
+
+- name: Create file with parameters for ARM template
+  template:
+    src: /root/ansible/roles/SQL-role/templates/azuredeploy.parameters-template
+    dest: /root/ansible/roles/SQL-role/files/azuredeploy.parameters.json
+
+- name: Create Azure Deploy
+  azure_rm_deployment:
+    state: present
+    subscription_id: "{{ sub }}"
+    client_id: "{{ cli }}"
+    secret: "{{ sec }}"
+    tenant: "{{ ten }}"
+    resource_group_name: SQL-TestGroup
+    template: "{{ lookup('file', '/root/ansible/roles/SQL-role/files/azuredeploy.json') }}"
+    parameters: "{{ (lookup('file', '/root/ansible/roles/SQL-role/files/azuredeploy.parameters.json') | from_json).parameters }}"
+

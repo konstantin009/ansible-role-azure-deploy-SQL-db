@@ -1,0 +1,32 @@
+---
+serverName: 'konsttestserver'
+location: 'eastus'
+
+keyVaultName: 'konstkey'
+loginSecretName: 'sqlserverlogin'
+passwordSecretName: 'sqlserverpassword'
+
+
+db1:
+ dbName: 'DBtest1'
+ skuName: 'Basic'
+ skuTier: 'Basic'
+ maxSizeBytes: '104857600'
+ collation: 'SQL_Latin1_General_CP1_CI_AS'
+
+db2:
+ dbName: 'DBtest2'
+ skuName: 'Basic'
+ skuTier: 'Basic'
+ maxSizeBytes: '104857600'
+ collation: 'SQL_Latin1_General_CP1_CI_AS'
+
+db3:
+ dbName: 'DBtest3'
+ skuName: 'Basic'
+ skuTier: 'Basic'
+ maxSizeBytes: '104857600'
+ collation: 'SQL_Latin1_General_CP1_CI_AS'
+
+dbAllSettings: ["{{ db1 }}", "{{ db2 }}", "{{ db3 }}"]
+

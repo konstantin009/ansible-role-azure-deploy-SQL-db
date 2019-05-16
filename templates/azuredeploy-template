@@ -1,0 +1,46 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "administratorLogin": {
+            "type": "string"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "name": "{{ serverName }}",
+            "apiVersion": "2015-05-01-preview",
+            "location": "{{ location }}",
+            "properties": {
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "version": "12.0"
+            },
+            "resources": [
+{% for item in dbAllSettings %}
+                {
+                   "type": "databases",
+                   "dependsOn": [
+                       "[concat('Microsoft.Sql/servers/', '{{ serverName }}')]"
+                   ],
+                   "name": "{{ item['dbName'] }}",
+                   "apiVersion": "2017-10-01-preview",
+                   "location": "{{ location }}",
+                   "sku": {
+                       "name": "{{ item['skuName'] }}",
+                       "tier": "{{ item['skuTier'] }}"
+                   },
+                   "properties": {
+                       "maxSizeBytes": "{{ item['maxSizeBytes'] }}",
+                       "collation": "{{ item['collation'] }}"
+                   }
+                },
+{% endfor %}
+            ]
+        }
+    ]
+}
